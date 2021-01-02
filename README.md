@@ -1,2 +1,5 @@
-# Webpage-Pagination-and-Filtering
- Webpage that parses through and pages list elements
+# Techdegree-Project-2
+ Pagination and Filtering
+
+
+This is to confirm github is syncing up properly with my local. 

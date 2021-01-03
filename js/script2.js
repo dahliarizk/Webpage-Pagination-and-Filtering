@@ -28,32 +28,43 @@ header.insertAdjacentHTML('beforeend',
 
 //this function searches the SearchNames array when the search button is clicked.
 //it pushes matches into new array called 'matches'. the following if/else clause
-//takes the matches array and displays results accordingly.
+//takes the matches array and displays results accordingly. it then needs an
+//additional event listener for any buttons generated for search results to page
+//through the matches array, not the data array.
 function searchStudents(list) {
-  let matches = []
-  let page = Math.ceil(matches.length / studentsPerPage)
   let input = document.querySelector('input')
-  const searchButton = document.querySelector('button');
-  searchButton.addEventListener('click', (e) => {
-    if (e.target.tagName === 'BUTTON') {
-      for (let i = 0; i < searchNames.length; i++) {
-        if (searchNames[i].toLowerCase().includes(input.value.toLowerCase())){
+  const searchImg = document.querySelector('img');
+  searchImg.addEventListener('click', (e) => {
+  let matches = []
+  let page;
+  for (let i = 0; i < searchNames.length; i++) {
+        if (input.value.length > 0 && searchNames[i].toLowerCase().includes(input.value.toLowerCase())){
           matches.push(list[i]);
         }
       }
-    }
-    return matches;
-});
-
-    if (matches.length === 0) {
-      studentlist.insertAdjacentHTML('beforeend', `
-        <p>Your search did not return any results. Please try again. </p>`)
+  if (matches.length === 0) {
+      studentlist.innerHTML =
+        `<h3>Your search did not return any results. Please try again. </h3>`
         input.value = '';
+      linkList.innerHTML = '';
   } else if (matches.length > 0) {
-      showPage(matches, page)
+      page = Math.ceil(matches.length / studentsPerPage)
+      showPage(matches, page);
       addPagination(matches);
       input.value = '';
-  }
+    }
+
+  linkList.addEventListener('click', (e) => {
+    const buttons = document.querySelectorAll('button');
+    if (e.target.tagName === 'BUTTON') {
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('active');
+  } e.target.classList.add('active');
+      const page = e.target.textContent;
+      showPage(matches, page)
+    }
+  });
+});
 };
 
 
@@ -85,15 +96,15 @@ function showPage(list, page) {
 //*studentsPerPage*. sets the first button as 'active'.
     function addPagination(list) {
       const numberOfButtons = Math.ceil(list.length / studentsPerPage)
-      let li = document.createElement('li');
+      //let li = document.createElement('li');
       linkList.innerHTML = '';
       for (let i = 0; i < numberOfButtons; i++ ){
         linkList.insertAdjacentHTML('beforeend', `
         <li>
-          <button type="button" class="active">${i+1}</button>
+          <button type="button" class= >${i+1}</button>
         </li>`)
       }
-      linkList.firstElementChild.firstElementChild.className = 'active'
+    linkList.firstElementChild.firstElementChild.className = 'active'
   };
 
 //event listener for paging through the selected set of students when one of the buttons is clicked.
@@ -102,21 +113,11 @@ function showPage(list, page) {
       if (e.target.tagName === 'BUTTON') {
         for (let i = 0; i < buttons.length; i++) {
           buttons[i].classList.remove('active');
-      } e.target.classList.add('active');
+    } e.target.classList.add('active');
         const page = e.target.textContent;
         showPage(data, page)
       }
     });
-
-
-
-
-
-
-
-
-
-
 
 searchStudents(data);
 showPage(data,1);

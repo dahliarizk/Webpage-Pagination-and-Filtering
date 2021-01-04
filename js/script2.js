@@ -48,8 +48,7 @@ function searchStudents(list) {
         input.value = '';
       linkList.innerHTML = '';
   } else if (matches.length > 0) {
-      page = Math.ceil(matches.length / studentsPerPage)
-      showPage(matches, page);
+      showPage(matches, 1);
       addPagination(matches);
       input.value = '';
     }
